@@ -1,5 +1,6 @@
 import sys
 import aiomysql
+from config import host, user, password, db
 
 
 async def create_pool():
@@ -8,9 +9,9 @@ async def create_pool():
         # pool = await aiomysql.create_pool(host="localhost", port=3306,
         #                             user="root", password="",
         #                             db="u2229695_default", autocommit=True)
-        pool = await aiomysql.create_pool(host="sarahr.ru", port=3306,
-                                    user="u2229695_default", password="qHs2xI8GN2rXogN5",
-                                    db="u2229695_default", autocommit=True)
+        pool = await aiomysql.create_pool(host=host, port=3306,
+                                    user=user, password=password,
+                                    db=db, autocommit=True)
         print('Подключились к БД...')
         # return pool
     except Exception:
