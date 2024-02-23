@@ -6,9 +6,6 @@ from config import host, user, password, db
 async def create_pool():
     global pool
     try:
-        # pool = await aiomysql.create_pool(host="localhost", port=3306,
-        #                             user="root", password="",
-        #                             db="u2229695_default", autocommit=True)
         pool = await aiomysql.create_pool(host=host, port=3306,
                                     user=user, password=password,
                                     db=db, autocommit=True)
