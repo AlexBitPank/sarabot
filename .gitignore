@@ -1,7 +1,6 @@
 /__pycache__
 /venv
 /.venv
-config.py
 bot_run.bat
 bot_run.sh
 # Игнорировать файл с переменными окружения
