@@ -1,0 +1,15 @@
+
+services:
+  telegram-bot:
+    build: .
+    environment:
+      - TOKEN=${TOKEN}
+      - CHAT_ID=${CHAT_ID}
+      - ADMINS=${ADMINS}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    volumes:
+      - .:/app
+    command: python run.py
