@@ -15,13 +15,14 @@ async def create_pool():
         print('Failed to connect to database')
         sys.exit()
 
-async def select(query):
+async def select(query, params=None):
     global pool
     async with pool.acquire() as conn:
-        async with conn.cursor() as cursor:    
-            await cursor.execute(query)
+        async with conn.cursor() as cursor:
+            await cursor.execute(query, params)
             records = await cursor.fetchall()
             return records
+
 
 async def insert(query):
     global pool
@@ -66,7 +67,7 @@ async def get_limit_listings(limit = 5):
     records = await select(query)
     return records
 
-async def get_listing_by_number(number):
+async def _get_listing_by_number(number):
     query = f"""
             SELECT
                 `wp_posts`.`ID`,
@@ -81,6 +82,27 @@ async def get_listing_by_number(number):
             """
     records = await select(query)
     return records
+
+
+async def get_listing_by_number(number):
+    query = """
+            SELECT
+                `wp_posts`.`ID`,
+                `wp_posts`.`post_title`,
+                `wp_posts`.`post_content`,
+                `wp_posts`.`post_excerpt`
+            FROM
+                `wp_posts`
+            JOIN `wp_postmeta` ON `wp_postmeta`.`post_id` = wp_posts.ID
+            WHERE
+                `wp_postmeta`.`meta_key` = 'hp_number' 
+                AND `wp_postmeta`.`meta_value` = %s 
+                AND `wp_posts`.`post_type` = 'hp_listing' 
+                AND `wp_posts`.`post_status` = 'publish'
+            """
+    records = await select(query, (number,))
+    return records
+
 
 async def get_listing_attribute(id):
     query = f"""SELECT REPLACE(`meta_key`, 'hp_', ''), `meta_value`
